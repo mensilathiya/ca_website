@@ -6,7 +6,7 @@
 <title>Contact Us | DV LLP</title>
 <meta name="description" content="DV LLP: management consulting, accounting and bookkeeping, income tax and GST, project finance, loan assistance, transaction advisory and work automation.">
 <link rel="icon" href="../assets/images/favicon.png">
-<link rel="stylesheet" href="../assets/css/style.css">
+<link rel="stylesheet" href="../assets/css/style.css?v=5">
 </head>
 <body id="top">
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -39,12 +39,13 @@
   <section class="page-banner"><h1>Contact Us</h1></section>
   <section class="contact-sec">
     <div class="contact-wrap">
-      <form class="contact-card" id="contactForm" data-msg="Thank you! We will get back to you soon." novalidate>
+      <form class="contact-card" id="contactForm" data-msg="Thank you! We will get back to you soon." data-sheet-url="https://script.google.com/macros/s/AKfycbzIaDftgu2SDyb4GjrXjfZOi6hlb0I_layFMEauz01k_bp8GvRmT7fFCYuqrqsDazY/exec" novalidate>
         <h2 class="uline">Get In Touch</h2>
-        <label>Name <i>*</i><input name="name" type="text" placeholder="Name" required autocomplete="name"></label>
-        <label>Email <i>*</i><input name="email" type="email" placeholder="Email" required autocomplete="email"></label>
-        <label>Mobile No. <i>*</i><input name="mobile" type="tel" placeholder="Mobile No." required pattern="[0-9+ ]{10,15}" autocomplete="tel"></label>
-        <label>Comment<textarea name="comment" rows="4" placeholder="Comment"></textarea></label>
+        <label>Name <i>*</i><input name="name" type="text" placeholder="Name" maxlength="60" required autocomplete="name"><small class="err" aria-live="polite"></small></label>
+        <label>Email <i>*</i><input name="email" type="email" placeholder="Email" maxlength="100" required autocomplete="email"><small class="err" aria-live="polite"></small></label>
+        <label>Mobile No. <i>*</i><input name="mobile" type="tel" inputmode="tel" placeholder="Mobile No." maxlength="16" required autocomplete="tel"><small class="err" aria-live="polite"></small></label>
+        <label>Comment<textarea name="comment" rows="4" maxlength="500" placeholder="Comment"></textarea><small class="err" aria-live="polite"></small></label>
+        <input type="text" name="bot_trap" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;opacity:0;height:0;width:0">
         <button class="submit" type="submit">Submit</button>
         <p class="form-msg" role="status" hidden></p>
       </form>
@@ -75,6 +76,6 @@
 </footer>
 
 
-<script src="../assets/js/script.js"></script>
+<script src="../assets/js/script.js?v=5"></script>
 </body>
 </html>

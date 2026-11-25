@@ -320,6 +320,9 @@ h2{font:600 28px/1.25 var(--head-font);color:#222;letter-spacing:.01em}
 .f-grid textarea{height:48px;resize:vertical}
 .f-grid :is(input,select,textarea):focus{outline:0;border-color:var(--green);box-shadow:0 0 0 3px rgba(58,58,203,.15)}
 .f-grid :is(input,select):user-invalid{border-color:#d33}
+.err{
+  color: #d33;
+}
 .submit{display:block;width:100%;height:46px;margin-top:50px;border:0;background:var(--green);color:#fff;font:600 15px var(--body-font);cursor:pointer;transition:background .3s,letter-spacing .3s}
 .submit:hover{background:var(--green-dk);letter-spacing:.06em}
 .form-msg{margin:14px 0 0;font-weight:600;color:var(--green-dk)}

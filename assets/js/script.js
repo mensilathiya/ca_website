@@ -124,14 +124,90 @@
   window.addEventListener('resize', moveTeam);
   }
 
-  /* ---------- Forms (front-end only) ---------- */
+  /* ---------- Contact form: validation + Google Sheet (Google Apps Script) ---------- */
   d.querySelectorAll('#contactForm').forEach(function (f) {
+    var msg = f.querySelector('.form-msg'), btn = f.querySelector('.submit');
+    var hideTimer;
+    function show(text, ok) {
+      clearTimeout(hideTimer);
+      msg.textContent = text; msg.hidden = false; msg.style.color = ok ? '' : '#d33';
+      if (ok) hideTimer = setTimeout(function () { msg.hidden = true; msg.textContent = ''; }, 20000);   // success message disappears after 20 seconds
+    }
+
+    var rules = {
+      name: function (v) {
+        if (!v) return 'Please enter your name.';
+        if (v.length < 2) return 'Name must be at least 2 characters.';
+        if (!/^[\p{L}][\p{L} .'\-]*$/u.test(v)) return 'Name can contain only letters, spaces, . \' and -';
+        return '';
+      },
+      email: function (v) {
+        if (!v) return 'Please enter your email address.';
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)) return 'Please enter a valid email, e.g. name@example.com';
+        return '';
+      },
+      mobile: function (v) {
+        if (!v) return 'Please enter your mobile number.';
+        var n = v.replace(/[\s\-()]/g, '');
+        if (!/^(\+91|91|0)?[6-9]\d{9}$/.test(n)) return 'Enter a valid 10-digit Indian mobile number (starting with 6-9).';
+        return '';
+      },
+      comment: function (v) { return v.length > 500 ? 'Comment can be at most 500 characters.' : ''; }
+    };
+    function field(name) { return f.elements[name]; }
+    function check(name) {
+      var el = field(name), err = el.parentElement.querySelector('.err'), m = rules[name](el.value.trim());
+      err.textContent = m;
+      el.classList.toggle('invalid', !!m);
+      el.classList.toggle('valid', !m && el.value.trim() !== '');
+      el.setAttribute('aria-invalid', m ? 'true' : 'false');
+      return !m;
+    }
+    Object.keys(rules).forEach(function (n) {
+      var el = field(n);
+      el.addEventListener('blur', function () { check(n); });
+      el.addEventListener('input', function () { if (el.classList.contains('invalid')) check(n); });
+    });
+
     f.addEventListener('submit', function (e) {
       e.preventDefault();
-      var msg = f.querySelector('.form-msg');
-      if (!f.checkValidity()) { f.reportValidity(); return; }
-      msg.textContent = f.dataset.msg || 'Thank you! Your application has been received.'; msg.hidden = false;
-      f.reset();
+      clearTimeout(hideTimer); msg.hidden = true;
+      var firstBad = null;
+      Object.keys(rules).forEach(function (n) { if (!check(n) && !firstBad) firstBad = field(n); });
+      if (firstBad) { firstBad.focus(); return; }
+
+      var url = (f.dataset.sheetUrl || '').trim();
+      if (!/^https:\/\/script\.google\.com\/macros\/s\/[^\/]+\/exec/.test(url)) {
+        show('Form is not connected yet. Add the Google Apps Script Web app URL (ending with /exec) in contact-us.html.', false); return;
+      }
+      var mob = field('mobile').value.replace(/[\s\-()]/g, '').replace(/^(\+91|91|0)/, '');
+      var body = new URLSearchParams();
+      body.append('name', field('name').value.trim());
+      body.append('email', field('email').value.trim());
+      body.append('mobile', '+91 ' + mob.slice(0, 5) + ' ' + mob.slice(5));
+      body.append('comment', field('comment').value.trim());
+      body.append('bot_trap', field('bot_trap').value);
+
+      btn.disabled = true; var label = btn.textContent; btn.textContent = 'Sending...';
+      fetch(url, { method: 'POST', body: body, redirect: 'follow' })
+        .then(function (r) { return r.text(); })
+        .then(function (txt) {
+          var res; try { res = JSON.parse(txt); } catch (x) { res = null; }
+          if (res && res.ok && res.saved) {
+            console.log('Saved in Google Sheet:', res.saved || res);
+            show(f.dataset.msg || 'Thank you! We will get back to you soon.', true);
+            f.reset();
+            f.querySelectorAll('.valid,.invalid').forEach(function (el) { el.classList.remove('valid', 'invalid'); });
+          } else {
+            console.error('Sheet response:', txt.slice(0, 400));
+            show(res && res.ok ? 'Old Apps Script version is still deployed. Paste the latest code and deploy a New version.' : (res && res.error ? 'Could not save: ' + res.error : 'Could not save your message. The Apps Script is not deployed correctly (see browser console).'), false);
+          }
+        })
+        .catch(function (err) {
+          console.error('Sheet request failed:', err);
+          show('Could not reach the sheet. Check the Web app URL and that access is set to "Anyone".', false);
+        })
+        .then(function () { btn.disabled = false; btn.textContent = label; });
     });
   });
 
