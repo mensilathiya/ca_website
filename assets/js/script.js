@@ -27,6 +27,11 @@
   window.addEventListener('resize', function () {
     if (window.innerWidth > 1024) { nav.classList.remove('open'); menuBtn.setAttribute('aria-expanded', 'false'); d.querySelectorAll('.has-sub.open').forEach(function (li) { li.classList.remove('open'); }); }
   });
+  function setBarHeight() {
+    var tb = d.querySelector('.topbar');
+    if (tb) d.documentElement.style.setProperty('--topbar-h', tb.offsetHeight + 'px');
+  }
+  setBarHeight(); window.addEventListener('resize', setBarHeight); window.addEventListener('load', setBarHeight);
   function onScroll() { header.classList.toggle('scrolled', window.scrollY > 10); }
   window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
 
