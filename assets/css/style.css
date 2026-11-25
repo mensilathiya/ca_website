@@ -253,6 +253,7 @@ body{font:500 16px/1.5 var(--body-font);color:#7a7a7a}
 .tag-row::before{top:auto;bottom:0;height:3px;width:100vw}
 .tag{font:700 16px/1 var(--head-font);letter-spacing:.15em;padding:12px 15px}
 h2{font:600 28px/1.25 var(--head-font);color:#222;letter-spacing:.01em}
+/* .section h2{margin-bottom:0} */
 .about-copy p,.team-copy p{font-size:16px;line-height:1.6}
 .cards,.tiles{gap:16px 30px;margin-top:28px}
 .card{padding:40px;min-height:307px;box-shadow:none;transition:background .35s,color .35s}
@@ -320,9 +321,6 @@ h2{font:600 28px/1.25 var(--head-font);color:#222;letter-spacing:.01em}
 .f-grid textarea{height:48px;resize:vertical}
 .f-grid :is(input,select,textarea):focus{outline:0;border-color:var(--green);box-shadow:0 0 0 3px rgba(58,58,203,.15)}
 .f-grid :is(input,select):user-invalid{border-color:#d33}
-.err{
-  color: #d33;
-}
 .submit{display:block;width:100%;height:46px;margin-top:50px;border:0;background:var(--green);color:#fff;font:600 15px var(--body-font);cursor:pointer;transition:background .3s,letter-spacing .3s}
 .submit:hover{background:var(--green-dk);letter-spacing:.06em}
 .form-msg{margin:14px 0 0;font-weight:600;color:var(--green-dk)}
@@ -586,3 +584,26 @@ img{height:auto}
 .member-grid{display:block;max-width:960px}
 .m-info{border-left:4px solid var(--green);padding-left:28px}
 @media (max-width:760px){.member-grid{max-width:none}.m-info{padding-left:18px}}
+
+/* ===== Contact form validation ===== */
+.contact-card .err{display:block;min-height:0;margin-top:4px;font:600 12px/1.3 var(--body-font);color:#d33}
+.contact-card .err:empty{display:none}
+.contact-card input.invalid,.contact-card textarea.invalid{border-color:#d33!important;box-shadow:0 0 0 3px rgba(221,51,51,.12)}
+.contact-card input.valid,.contact-card textarea.valid{border-color:#2e9d57}
+.contact-card .submit:disabled{opacity:.7;cursor:wait}
+
+/* ===== Navbar: same look as reference (size, spacing, underline) ===== */
+@media (min-width:1025px){
+  .nav>ul>li>a::after{bottom:18px;height:3px}
+  .has-sub>a::after{right:0}
+}
+@media (min-width:1181px){
+  .nav a{font-size:14px;font-weight:600;letter-spacing:.04em;padding:0 10px}
+  .sub a{font-size:15px;font-weight:500;letter-spacing:.01em;padding:12px 20px!important}
+}
+
+/* ===== Top bar (email + phone) stays fixed with the header ===== */
+:root{--topbar-h:30px}
+.topbar{position:sticky;top:0;z-index:101}
+.site-header{top:var(--topbar-h)}
+html{scroll-padding-top:calc(var(--topbar-h) + 100px)}
