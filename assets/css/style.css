@@ -253,7 +253,7 @@ body{font:500 16px/1.5 var(--body-font);color:#7a7a7a}
 .tag-row::before{top:auto;bottom:0;height:3px;width:100vw}
 .tag{font:700 16px/1 var(--head-font);letter-spacing:.15em;padding:12px 15px}
 h2{font:600 28px/1.25 var(--head-font);color:#222;letter-spacing:.01em}
-/* .section h2{margin-bottom:0} */
+.section h2{margin-bottom:0}
 .about-copy p,.team-copy p{font-size:16px;line-height:1.6}
 .cards,.tiles{gap:16px 30px;margin-top:28px}
 .card{padding:40px;min-height:307px;box-shadow:none;transition:background .35s,color .35s}
@@ -607,3 +607,19 @@ img{height:auto}
 .topbar{position:sticky;top:0;z-index:101}
 .site-header{top:var(--topbar-h)}
 html{scroll-padding-top:calc(var(--topbar-h) + 100px)}
+
+/* ===== Team section: responsive fix (grid column was stretching past the screen) ===== */
+.team-grid>*{min-width:0}
+.team-view{max-width:100%}
+@media (max-width:1000px){
+  .team-grid{grid-template-columns:minmax(0,1fr);gap:1.5rem}
+  .team-copy p{text-align:left}
+  .team-show{padding:1.5rem 0 1.5rem 0}
+}
+@media (max-width:640px){
+  .team-sec{padding-bottom:3rem}
+  .team-copy h2{overflow-wrap:anywhere}
+  .team-track figure.tcard{padding:24px 20px;min-height:140px}
+  .tcard b{font-size:18px}
+  .team-nav{margin-top:1.2rem}
+}
